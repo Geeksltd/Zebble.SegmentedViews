@@ -8,6 +8,8 @@
     {
         public TimeSpan AnimationDuration = 300.Milliseconds();
         public AnimationEasing Easing = AnimationEasing.EaseInOut;
+        public bool IsFirstSegmentActive = true;
+
         public SegmentedViews() { ClipChildren = false; }
     }
 
@@ -51,12 +53,28 @@
                     return;
                 }
 
+                var content = contents.CurrentChildren<Content>().ToArray()[Index.Value];
+
+                if (content == null)
+                {
+                    Device.Log.Error("Each content should be inside a Contents view.");
+                    return;
+                }
+
                 await contents.Animate(
                     RootView.AnimationDuration,
                     RootView.Easing,
                     (c) => c.X(-c.Items[Index.Value].X.CurrentValue));
+
+                if (!content.IsActuallyShown)
+                {
+                    content.IsActuallyShown = true;
+                    await content.RaiseShown();
+                }
             });
         }
+
+
     }
 
     public class Contents : Stack
@@ -65,9 +83,22 @@
         public Contents() : base(RepeatDirection.Horizontal) { Id = "ViewsContainer"; ClipChildren = false; }
     }
 
-    public class Content : Stack
+    public class Content : LazyLoader
     {
+        public bool IsActuallyShown { get; set; }
         public int? Index => Container?.CurrentChildren<Content>()?.IndexOf(this);
         public Contents Container => FindParent<Contents>();
+
+        public override async Task RaiseShown()
+        {
+            if (!IsActuallyShown) return;
+            await Loaded();
+        }
+
+        public override async Task OnInitialized()
+        {
+            await base.OnInitialized();
+            if (this == Container.CurrentChildren<Content>().FirstOrDefault()) await Loaded();
+        }
     }
 }
