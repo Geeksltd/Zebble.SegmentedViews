@@ -89,14 +89,8 @@
 
         public override async Task RaiseShown()
         {
-            if (!IsActuallyShown) return;
+            if (!IsActuallyShown && this != Container?.CurrentChildren<Content>()?.FirstOrDefault()) return;
             await Loaded();
-        }
-
-        public override async Task OnInitialized()
-        {
-            await base.OnInitialized();
-            if (this == Container.CurrentChildren<Content>().FirstOrDefault()) await Loaded();
         }
     }
 }
