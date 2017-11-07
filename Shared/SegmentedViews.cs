@@ -91,6 +91,7 @@
         {
             if (!IsActuallyShown && this != Container?.CurrentChildren<Content>()?.FirstOrDefault()) return;
             await Loaded();
+            Container.Width(Container.CurrentChildren.Sum(x => x.ActualWidth));
         }
     }
 }
