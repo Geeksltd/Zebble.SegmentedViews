@@ -2,10 +2,10 @@
 <package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
   <metadata>
     <id>Zebble.SegmentedViews</id>
-    <version>1.2.101</version>
+    <version>1.2.102</version>
     <title> SegmentedViews for Zebble (Xamarin)</title>
     <projectUrl>https://github.com/Geeksltd/Zebble.SegmentedViews</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.SegmentedViews/master/Shared/Icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/Geeksltd/Zebble.SegmentedViews/master/Shared/NuGet/Icon.png</iconUrl>
     <copyright>Copyright ©2017 Geeks Ltd - All rights reserved.</copyright>
     <description>Creates a SegmentedViews plugin for displaying different segments in a view.</description>
     <authors>Geeks Ltd</authors>
