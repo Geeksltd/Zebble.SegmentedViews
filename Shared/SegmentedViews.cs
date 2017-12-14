@@ -71,6 +71,12 @@
                     content.IsActuallyShown = true;
                     await content.RaiseShown();
                 }
+
+                if (content.NavigatedTo != null)
+                {
+                    await Task.Delay(50);
+                    await content.NavigatedTo?.Raise();
+                }
             });
         }
     }
@@ -83,8 +89,12 @@
 
     public class Content : LazyLoader
     {
+        public AsyncEvent NavigatedTo = new AsyncEvent();
+
         public bool IsActuallyShown { get; set; }
+
         public int? Index => Container?.CurrentChildren<Content>()?.IndexOf(this);
+
         public Contents Container => FindParent<Contents>();
 
         public override async Task RaiseShown()
