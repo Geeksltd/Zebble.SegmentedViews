@@ -9,6 +9,7 @@
         public TimeSpan AnimationDuration = 300.Milliseconds();
         public AnimationEasing Easing = AnimationEasing.EaseInOut;
         public bool IsFirstSegmentActive = true;
+        public AsyncEvent<Segment> SelectedSegmentChanged = new AsyncEvent<Segment>();
 
         public SegmentedViews() { ClipChildren = false; }
     }
@@ -24,60 +25,64 @@
         public int? Index => Container?.CurrentChildren<Segment>()?.IndexOf(this);
         public Segments Container => FindParent<Segments>();
         public SegmentedViews RootView => Container.FindParent<SegmentedViews>();
+
         public override async Task OnInitializing()
         {
             await base.OnInitializing();
+            Tapped.Handle(HandleSegmentTap);
+        }
 
-            Tapped.Handle(async () =>
+        async Task HandleSegmentTap()
+        {
+            if (Container == null || Index == null)
             {
-                if (Container == null || Index == null)
-                {
-                    Device.Log.Error("Each Segment should be inside a Segments view.");
-                    return;
-                }
+                Device.Log.Error("Each Segment should be inside a Segments view.");
+                return;
+            }
 
-                if (Root == null)
-                {
-                    Device.Log.Error("Segments should be inside a SegmentedViews view.");
-                    return;
-                }
+            if (Root == null)
+            {
+                Device.Log.Error("Segments should be inside a SegmentedViews view.");
+                return;
+            }
 
-                Container.Items.Do(async (b) => await b.UnsetPseudoCssState("active"));
-                await SetPseudoCssState("active");
+            Container.Items.Do(async (b) => await b.UnsetPseudoCssState("active"));
+            await SetPseudoCssState("active");
 
-                var contents = Container.CurrentSiblings<Contents>().FirstOrDefault();
+            var contents = Container.CurrentSiblings<Contents>().FirstOrDefault();
 
-                if (contents == null)
-                {
-                    Device.Log.Error("Each content should be inside a Contents view.");
-                    return;
-                }
+            if (contents == null)
+            {
+                Device.Log.Error("Each content should be inside a Contents view.");
+                return;
+            }
 
-                var content = contents.CurrentChildren<Content>().ToArray()[Index.Value];
+            var content = contents.CurrentChildren<Content>()?.ToArray()[Index.Value];
 
-                if (content == null)
-                {
-                    Device.Log.Error("Each content should be inside a Contents view.");
-                    return;
-                }
+            if (content == null)
+            {
+                Device.Log.Error("Each content should be inside a Contents view.");
+                return;
+            }
 
-                await contents.Animate(
-                    RootView.AnimationDuration,
-                    RootView.Easing,
-                    (c) => c.X(-c.Items[Index.Value].X.CurrentValue));
+            await contents.Animate(
+                RootView.AnimationDuration,
+                RootView.Easing,
+                (c) => c.X(-c.Items[Index.Value].X.CurrentValue));
 
-                if (!content.IsActuallyShown)
-                {
-                    content.IsActuallyShown = true;
-                    await content.RaiseShown();
-                }
+            if (!content.IsActuallyShown)
+            {
+                content.IsActuallyShown = true;
+                await content.RaiseShown();
+            }
 
-                if (content.NavigatedTo != null)
-                {
-                    await Task.Delay(50);
-                    await content.NavigatedTo?.Raise();
-                }
-            });
+            if (content.NavigatedTo != null)
+            {
+                await Task.Delay(50);
+                await content.NavigatedTo?.Raise();
+            }
+
+            await RootView.SelectedSegmentChanged.Raise(this);
         }
     }
 
