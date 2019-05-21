@@ -102,7 +102,7 @@
 
         public Contents Container => FindParent<Contents>();
 
-        public override async Task RaiseShown()
+        public async Task RaiseShown()
         {
             if (!IsActuallyShown && this != Container?.CurrentChildren<Content>()?.FirstOrDefault()) return;
             await Loaded();
