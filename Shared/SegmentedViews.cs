@@ -20,7 +20,7 @@
         public Segments() : base(RepeatDirection.Horizontal) { Id = "SegmentsContainer"; }
     }
 
-    public class Segment : Button
+    public class Segment : Stack
     {
         public int? Index => Container?.CurrentChildren<Segment>()?.IndexOf(this);
         public Segments Container => FindParent<Segments>();
