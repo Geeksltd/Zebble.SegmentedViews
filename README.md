@@ -1,4 +1,4 @@
-[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.SegmentedViews/master/Shared/NuGet/Icon.png "Zebble.SegmentedViews"
+﻿[logo]: https://raw.githubusercontent.com/Geeksltd/Zebble.SegmentedViews/master/icon.png "Zebble.SegmentedViews"
 
 
 ## Zebble.SegmentedViews
