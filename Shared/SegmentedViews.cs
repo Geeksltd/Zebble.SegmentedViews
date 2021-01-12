@@ -37,13 +37,13 @@
         {
             if (Container == null || Index == null)
             {
-                Device.Log.Error("Each Segment should be inside a Segments view.");
+                Log.For(this).Error(null, "Each Segment should be inside a Segments view.");
                 return;
             }
 
             if (Root == null)
             {
-                Device.Log.Error("Segments should be inside a SegmentedViews view.");
+                Log.For(this).Error(null, "Segments should be inside a SegmentedViews view.");
                 return;
             }
 
@@ -54,7 +54,7 @@
 
             if (contents == null)
             {
-                Device.Log.Error("Each content should be inside a Contents view.");
+                Log.For(this).Error(null, "Each content should be inside a Contents view.");
                 return;
             }
 
@@ -62,7 +62,7 @@
 
             if (content == null)
             {
-                Device.Log.Error("Each content should be inside a Contents view.");
+                Log.For(this).Error(null, "Each content should be inside a Contents view.");
                 return;
             }
 
