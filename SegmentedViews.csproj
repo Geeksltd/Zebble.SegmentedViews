@@ -7,7 +7,7 @@
     <RootNamespace>Zebble</RootNamespace>
     <PackageId>Zebble.SegmentedViews</PackageId>
     <Product>$(AssemblyName) ($(TargetFramework))</Product>
-    <Version>1.2.112.0</Version>
+    <Version>1.2.113.0</Version>
     <PackOnBuild>true</PackOnBuild>
     <NeutralLanguage>en</NeutralLanguage>
     <LangVersion>default</LangVersion>
